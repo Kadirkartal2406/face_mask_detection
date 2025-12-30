@@ -5,7 +5,7 @@ Bu proje, CNN kullanarak yüz görüntülerinden maskeli veya maskesiz olduğunu
 ## Kullanım
 
 1. Hugging Face linkinden uygulamayı açın:
-   [Public Space Link](https://huggingface.co/spaces/xeci/mnist-cnn-gradio)
+   [Public Space Link](https://huggingface.co/spaces/xeci/face-mask)
 2. Yüz resmi yükleyin.
 3. Sistem "Maskeli" veya "Maskesiz" olarak tahmin edecektir.
 
