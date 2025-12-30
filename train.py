@@ -4,6 +4,10 @@ import torch.optim as optim
 from torchvision import datasets, transforms
 from torch.utils.data import DataLoader
 import os
+from sklearn.metrics import confusion_matrix
+import matplotlib.pyplot as plt
+import seaborn as sns
+import numpy as np
 
 # ----------------------------
 # Dataset Ayarları
@@ -90,3 +94,36 @@ print(f"Validation Accuracy: {100*correct/total:.2f}%")
 # ----------------------------
 torch.save(model.state_dict(), "mask_model.pth")
 print("Model kaydedildi: mask_model.pth")
+# ----------------------------
+# 1. Tahminleri topla
+# ----------------------------
+y_true = []
+y_pred = []
+
+model.eval()
+with torch.no_grad():
+    for images, labels in test_loader:
+        images, labels = images.to(device), labels.to(device)
+        outputs = model(images)
+        _, predicted = torch.max(outputs, 1)
+        y_true.extend(labels.cpu().numpy())
+        y_pred.extend(predicted.cpu().numpy())
+
+# ----------------------------
+# 2. Confusion Matrix
+# ----------------------------
+cm = confusion_matrix(y_true, y_pred)
+print("Confusion Matrix:\n", cm)
+
+# ----------------------------
+# 3. Görselleştirme
+# ----------------------------
+plt.figure(figsize=(6,5))
+sns.heatmap(cm, annot=True, fmt="d", cmap="Blues",
+            xticklabels=train_data.classes,
+            yticklabels=train_data.classes)
+plt.xlabel("Predicted")
+plt.ylabel("Actual")
+plt.title("Confusion Matrix")
+plt.savefig("confusion_matrix.png")  # kaydet
+plt.show()
